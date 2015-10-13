@@ -1,3 +1,4 @@
+//关键在于转换为图形思考
 public class Solution {
     /** 
      *@param A : an integer rotated sorted array
