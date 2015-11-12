@@ -1,0 +1,28 @@
+/* 这道题用九章的二分法，不要管+1或者-1；
+   拿到start和end的值以后再分析一下就可以得到答答案 */
+public class Solution {
+    /**
+     * @param num: a rotated sorted array
+     * @return: the minimum number in the array
+     */
+    public int findMin(int[] num) {
+        // write your code here
+        int start = 0, end = num.length-1;
+        int mid;
+        
+        while (start + 1 < end) {
+            mid = start + (end - start) / 2;
+            if (num[mid] < num[end]) {           // right side increase
+                end = mid;
+            } else if (num[mid] > num [start]) { // left side increase
+                start = mid;
+            }
+        }        
+        if (num[start]>num[end]) {  // right on the edge of falling
+            return num[end];
+        } else {                    // on the right side of increase
+            return num[start];
+        }
+        
+    }
+}
