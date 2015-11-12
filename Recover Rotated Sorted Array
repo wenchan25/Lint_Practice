@@ -1,0 +1,29 @@
+// 三步翻转法
+
+public class Solution {
+    /**
+     * @param nums: The rotated sorted array
+     * @return: void
+     */
+    public void recoverRotatedSortedArray(ArrayList<Integer> nums) {
+        for (int i = 1; i < nums.size(); i++) { // !!i set to 1!!
+            if (nums.get(i-1) > nums.get(i)) { // where the cliff is
+                // use i-1 to avoid out of bound exception
+                reverse(nums, 0, i-1);
+                reverse(nums, i, nums.size()-1); // !!size()-1!!
+                reverse(nums, 0, nums.size()-1);
+            }
+        }
+        return;
+    }
+    
+    public void reverse (ArrayList<Integer> nums, int start, int end){
+        while (start < end) {
+            int temp = nums.get(start); // get the first one
+            nums.set(start, nums.get(end));
+            nums.set(end, temp);
+            start++;
+            end--;
+        }
+    }
+}
