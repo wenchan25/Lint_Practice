@@ -1,0 +1,28 @@
+public class Solution {
+    /**
+     * @param s : A string
+     * @return : A string
+     */
+    public String reverseWords(String s) {
+        // write your code
+        if (s == null || s.length() == 0) { // 空集
+            return "";
+        }
+        
+        String[] array = s.split(" "); // 处理空格的好方法
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = array.length - 1; i >= 0; i--) {
+            if (array[i] != "") {
+                sb.append(array[i]).append(" "); // append one by one;
+            }
+        }
+        // remove the last " "
+        if (sb.length() == 0) {  // no characters in the array
+            return ""; 
+        } else {
+            return sb.substring(0, sb.length()-1); // substring is used to convert strinbuilder to string
+        }
+    }
+}
+
