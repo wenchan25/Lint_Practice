@@ -27,7 +27,7 @@ public class Solution {
         while (!stack.empty()) {
             TreeNode node = stack.pop();
             preorder.add(node.val);
-            if(node.right != null) {       // 在九章里面必须先遍历右边才能通过？？
+            if(node.right != null) {       // 必须得是先右边才行，因为node存在stack里面的
                 stack.push(node.right); 
             }
             if (node.left != null) {
