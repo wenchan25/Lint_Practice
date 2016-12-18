@@ -1,0 +1,61 @@
+/* 1st method will lead to time limit */
+/* the time complexity is exponential sicne T(n) = T(n-1) + T(n-2) */
+
+class Solution {
+    /**
+     * @param n: an integer
+     * @return an integer f(n)
+     */
+    public int fibonacci(int n) {
+        // write your code here
+        if (n == 1 || n == 2) {
+            return (n-1);
+        }
+        
+        // int sum = (n-1) + (n-2);
+        
+        return fibonacci(n-1) + fibonacci(n-2);
+        
+    }
+}
+
+/* 2nd method will need O(n) space, using DP */
+/* T and S are both O(n) */
+
+public int fibonacci(int n) {
+        // declare an array to store the result
+        // it has to be n+2 to avoid out_of_bound
+        int[] f = new int[n+2]; 
+        f[1] = 0; // when input is 1 => zero
+        f[2] = 1; // when input is 2 => 1
+        
+        int i = 3;
+        while (i <= n) { // it has to be incremental instead of decremental
+            f[i] = f[i-1] + f[i-2];
+            i++;
+        }
+        
+        return f[n];
+    }
+
+/* 3rd method will only need O(1) space */
+/* We can optimize the space used in method 2 by storing the previous two numbers only */
+/* because that is all we need to get the next Fibannaci number in series. */
+public int fibonacci(int n) {
+    if (n < 3) return n-1;
+     
+    int first = 0;
+    int second = 1;
+    int third = 1;
+    
+    int i = 3;
+    while (i <= n) {
+        third = first + second;
+        first = second;
+        second = third;
+        i++;
+    }
+    return third;
+}
+
+
