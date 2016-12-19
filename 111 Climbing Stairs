@@ -1,0 +1,37 @@
+这道题参考了这个网址: http://blog.csdn.net/u012490475/article/details/48845683
+
+/*
+
+首先考虑边界情况，当有1层时，有一种方法。 
+然后再看2层时，有1+1、和2+0，两种方法。 
+再看3层时，首先有两种选择：走一步或者走两步。 
+如果走两步，那后面还剩一步可走； 
+如果走一步，后面还剩两步可走，后面的方法即可等同于上面的2层情况。 
+即可归纳出用C(i) = j; 表示n层时有j种可能。 
+C(1) = 1; 
+C(2) = 2; 
+C(3) = C(3-2) + C(3-1); //因为只有两种选择. 
+C(4) = C(4-2) + C(4-1); 
+… 
+C(n) = C(n-2) + C(n-1);
+
+*/
+
+public int climbStairs(int n) {
+  int a = 1;
+  int b = 1;
+  int c = 1;
+  for(int i = 1; i < n; i++) {
+    c = a + b;
+    a = b;
+    b = c;
+  }
+  return c;
+}
+上面的是iteration的做法，下面是递归，非常简洁。
+
+public static int climbStairs(int n) {
+  if (n == 1) return 1;
+  else if (n == 2) return 2;
+  else return climbStairs(n - 1) + climbStairs(n - 2);
+}
