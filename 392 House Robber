@@ -1,0 +1,25 @@
+// Ref: https://segmentfault.com/a/1190000003811581
+// Ref: http://www.cnblogs.com/grandyang/p/4383632.html
+
+/*
+如果选择了抢劫上一个屋子，那么就不能抢劫当前的屋子，所以最大收益就是抢劫上一个屋子的收益
+如果选择抢劫当前屋子，就不能抢劫上一个屋子，所以最大收益是到上一个屋子的上一个屋子为止的最大收益，加上当前屋子里有的钱
+*/
+
+public static long houseRobber(int[] A) {
+        int len = A.length;
+        if (len <= 1) {
+            return len == 0 ? 0: A[0];
+        }
+
+        long previous = A[0]; // a is the previous max
+        long current = Math.max(A[0], A[1]); // b is the current max
+        for(int i = 2; i < len; i++){
+            long tmp = current;
+            // previous + A[i] => pre-pre + current
+            // b/c it cannot rob adjacent houses => need to compare
+            current = Math.max(previous + A[i], current);
+            previous = tmp;
+        }
+        return current;
+    }
