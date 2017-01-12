@@ -1,0 +1,23 @@
+// ref: https://skyyen999.gitbooks.io/-leetcode-with-javascript/content/questions/203md.html
+
+public ListNode removeElements(ListNode head, int val) {
+        // Write your code here
+        if (head == null) return null;
+        
+        ListNode dummy = new ListNode(0);
+        dummy.next = head;
+        ListNode cur = dummy;
+        
+        while (cur.next != null ) {
+            if (cur.next.val == val) {
+                cur.next = cur.next.next;
+            } else {
+                cur = cur.next;
+            }
+        }
+        
+        return dummy.next; 
+        // cur.next is actually head
+        // it must return dummy.next instead of cur.next
+        
+    }
