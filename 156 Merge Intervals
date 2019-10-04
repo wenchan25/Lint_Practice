@@ -1,0 +1,37 @@
+/* 类似于meeting room，Lambda表达式来排序 */
+
+/**
+ * Definition of Interval:
+ * public classs Interval {
+ *     int start, end;
+ *     Interval(int start, int end) {
+ *         this.start = start;
+ *         this.end = end;
+ *     }
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param intervals: interval list.
+     * @return: A new interval list.
+     */
+    public List<Interval> merge(List<Interval> intervals) {
+        // write your code here
+        List<Interval> ans = new ArrayList<>();
+        
+        intervals.sort(Comparator.comparing(i -> i.start));
+        
+        Interval last = null;
+        for (Interval i : intervals) {
+            if (last == null || last.end < i.start) {
+                ans.add(i);
+                last=i;
+            } else {
+                last.end=Math.max(last.end, i.end);
+            }
+        }
+        
+        return ans;
+    }
+}
