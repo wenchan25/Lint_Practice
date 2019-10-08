@@ -1,0 +1,46 @@
+/* 多关键字排序，就是重写Comparator */
+
+public class Solution {
+    /**
+     * @param logs: the logs
+     * @return: the log after sorting
+     */
+    public String[] logSort(String[] logs) {
+        // Write your code here
+        List<String> list = new ArrayList<>();
+        String[] ans = new String[logs.length];
+        
+        // counting backward;
+        int count = logs.length - 1;
+        for (int i = logs.length - 1; i >= 0; i--) {
+            int index = logs[i].indexOf(' ');
+            String body = logs[i].substring(index + 1);// get the body without space
+            
+            if (Character.isDigit(body.trim().charAt(0))) ans[count--] = logs[i]; // put numbers to the end of array, no need to sort
+            else list.add(logs[i]); // put letters to the list;
+        }
+        
+        MyComparator mc = new MyComparator();
+        Collections.sort(list, mc);
+        
+        int k = 0;
+        for (String s : list) ans[k++] = s;
+        return ans;
+    }
+    
+    // Override compare method;
+    class MyComparator implements Comparator {
+        @Override
+        public int compare (Object o1, Object o2) {
+            String s1 = (String)o1, s2 = (String)o2; // conver to string
+            int idx1 = s1.indexOf(' '), idx2 = s2.indexOf(' '); // get index of space;
+            
+            String head1 = s1.substring(0, idx1), head2 = s2.substring(0, idx2);
+            // body will include space, but it does not matter because it will cancel out
+            String body1 = s1.substring(idx1), body2 = s2.substring(idx2); 
+    
+            if (body1.equals(body2)) return head1.compareTo(head2);// if body is the same;
+            else return body1.compareTo(body2);
+        }
+    }
+}
