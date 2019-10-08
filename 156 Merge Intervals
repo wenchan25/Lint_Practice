@@ -22,16 +22,16 @@ public class Solution {
         
         intervals.sort(Comparator.comparing(i -> i.start));
         
-        Interval last = null;
-        for (Interval i : intervals) {
-            if (last == null || last.end < i.start) {
-                ans.add(i);
-                last=i;
+        Interval prev = null;
+        for (Interval curr : intervals) {
+            if (prev == null || prev.end < curr.start) {
+                ans.add(curr);
+                prev = curr;
             } else {
-                last.end=Math.max(last.end, i.end);
+                // extend previous one; not current one;
+                prev.end = Math.max(prev.end, curr.end);
             }
         }
-        
         return ans;
     }
 }
