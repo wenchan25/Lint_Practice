@@ -1,0 +1,27 @@
+/* check if result is zero */
+
+public class Solution {
+    /**
+     * @param A: a sparse matrix
+     * @param B: a sparse matrix
+     * @return: the result of A * B
+     */
+    public static int[][] multiply(int[][] A, int[][] B) {
+        // write your code here
+        int[][] C = new int[A.length][B[0].length];
+
+        int rowNum = C.length;
+        int colNum = C[0].length;
+
+        for (int row = 0; row < rowNum; row++) {
+            for (int k = 0; k < A[0].length; k++) { // this has to be A[0].length, not C[0]
+                if (A[row][k] != 0) { // add this check to avoid some work
+                    for (int col = 0; col < colNum; col++) {
+                        C[row][col] += A[row][k] * B[k][col];
+                    }
+                }
+            }
+        }
+        return C;
+    }
+}
