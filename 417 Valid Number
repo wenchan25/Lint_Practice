@@ -1,0 +1,41 @@
+public class Solution {
+    /**
+     * @param s: the string that represents a number
+     * @return: whether the string is a valid number
+     */
+    public boolean isNumber(String s) {
+        // write your code here
+        if (s == null || s.length() == 0) return false;
+        
+        // tweak the input
+        s = s.trim() + " "; // add one more space to avoid out of boundary
+        char[] sc = s.toCharArray();
+         int len = s.length() - 1; // get how many elements, HAS TO BE AFTER TRIM (e.g., "1 ")
+        
+        // check if it begins with +/- sign, just skip
+        int i = 0;
+        if (sc[i] == '+' || sc[i] == '-') i++;
+        
+        // check dot and numbers; at most 1 dot, at least 1 number will be valid
+        int dotNum = 0, digitNum = 0;
+        while (Character.isDigit(sc[i]) || sc[i] =='.') {
+            if (Character.isDigit(sc[i])) digitNum++;
+            if (sc[i] == '.') dotNum++;
+            i++;
+        }
+        if (digitNum <= 0 || dotNum > 1) return false;
+
+        // now move to check e
+        if (sc[i] == 'e') {
+            i++; // first skip
+            if (sc[i] == '+' || sc[i] == '-') i++; // skip
+            if (i == len) return false; // reached end, invalid
+            while (i < len) {
+                if (!Character.isDigit(sc[i])) return false;
+                i++;
+            }
+        }
+        
+        return i == len; // it will be true if it reaches the end;
+    }
+}
