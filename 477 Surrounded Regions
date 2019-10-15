@@ -3,7 +3,7 @@ public class Solution {
      * @param board: board a 2D board containing 'X' and 'O'
      * @return: nothing
      */
-         public void surroundedRegions(char[][] board) {
+     public void surroundedRegions(char[][] board) {
         // write your code here
         if (board == null || board.length == 0 || board[0].length == 0) return;
 
