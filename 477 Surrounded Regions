@@ -3,69 +3,67 @@ public class Solution {
      * @param board: board a 2D board containing 'X' and 'O'
      * @return: nothing
      */
-    public void surroundedRegions(char[][] board) {
+         public void surroundedRegions(char[][] board) {
         // write your code here
-        
         if (board == null || board.length == 0 || board[0].length == 0) return;
-        
-        int n = board.length; // row
-        int m = board[0].length;//column
-        
-        // visit 4 borders
-        
-        // upper and lower
-        for (int i = 0; i < n; i++) {
+
+        // row and column
+        int rows = board.length;
+        int cols = board[0].length;
+
+        // visit 4 borders: upper/lower; left/right
+        for (int i = 0; i < rows; i++) {
             bfs(board, i, 0);
-            bfs(board, i, m - 1);
+            bfs(board, i, cols - 1);
         }
-        
-        // left and right
-        for (int j = 0; j < m; j++) {
+        for (int j = 0; j < cols; j++) {
             bfs(board, 0, j);
-            bfs(board, n-1, j);
+            bfs(board, rows - 1, j);
         }
-        
-        for (int i = 0; i < n; i++){
-            for (int j = 0; j < m; j++) {
+
+        // iterate all areas, if it's marked as W, it's on the borderline;
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 if (board[i][j] == 'W') {
                     board[i][j] = 'O';
                 } else {
                     board[i][j] = 'X';
                 }
-            } 
+            }
         }
     }
-    
-    private void bfs(char[][] board, int sx, int sy){
-        if (board[sx][sy] != 'O') return;
-        
-        // 上下左右
-        int[] dx = {0,0,-1,1};
-        int[] dy = {-1,1,0,0};
-        
+
+    void bfs(char[][] board, int x, int y) {
+        if (board[x][y] != 'O') return; // only change O
+
+        int rows = board.length;
+        int cols = board[0].length;
+
+        // 2 arrays to handle upper/lower/left/right;
+        int[] dx = {0, 0, -1, 1};
+        int[] dy = {-1, 1, 0, 0};
+
         Queue<Integer> qx = new LinkedList<>();
         Queue<Integer> qy = new LinkedList<>();
-        
-        qx.offer(sx);
-        qy.offer(sy);
-        board[sx][sy] = 'W'; // water, visited;
-        
+        qx.offer(x);
+        qy.offer(y);
+        board[x][y] = 'W';// visited, W, 注水
+
         while (!qx.isEmpty()) {
             int cx = qx.poll();
             int cy = qy.poll();
-            
+
+            // iterate each one's neighbors
             for (int i = 0; i < 4; i++) {
                 int nx = cx + dx[i];
                 int ny = cy + dy[i];
-                if (nx >= 0 && nx < board.length && ny >=0 && ny < board[0].length && board[nx][ny] == 'O') {
-                    //两重意思，这个点是O，而且是没有被访问过的O
+
+                if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && board[nx][ny] == 'O') {
                     board[nx][ny] = 'W';
                     qx.offer(nx);
                     qy.offer(ny);
                 }
             }
         }
-        
-        
     }
 }
