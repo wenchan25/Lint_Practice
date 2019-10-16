@@ -1,0 +1,54 @@
+/* 注意 +10 %10来转动 */
+public class Solution {
+    /**
+     * @param deadends: the list of deadends
+     * @param target: the value of the wheels that will unlock the lock
+     * @return: the minimum total number of turns 
+     */
+    public int openLock(String[] deadends, String target) {
+        String start = "0000";
+        if (start.equals(target)) return 0;
+
+        // convert array to set, for quick/easy query
+        Set<String> deadSet = new HashSet<>();
+        for (String str : deadends) deadSet.add(str);
+
+        if (deadSet.contains(start)) return -1;
+
+        Queue<String> q = new LinkedList<>();
+        Set<String> v = new HashSet<>(); // visited
+
+        q.offer(start);
+        v.add(start);
+
+        int dist = 0;
+        while (!q.isEmpty()) {
+            dist++;
+            int size = q.size();
+            for (int i = 0; i < size; i++) {
+                // get all elements in the queue;
+                String curr = q.poll();
+                for (int j = 0; j < 4; j++) {
+                    // tricky, it needs + 10 and %10 for 0 go to 9
+                    String next = curr.substring(0, j) + (curr.charAt(j) - '0' - 1 + 10) % 10 + curr.substring(j + 1);
+                    if (target.equals(next)) return dist;
+
+                    // if not visited and is not deadset
+                    if (!v.contains(next) && !deadSet.contains(next)) {
+                        v.add(next);
+                        q.offer(next);
+                    }
+
+                    next = curr.substring(0, j) + (curr.charAt(j) - '0' + 1 + 10) % 10 + curr.substring(j + 1);
+                    if (target.equals(next)) return dist;
+
+                    if (!v.contains(next) && !deadSet.contains(next)) {
+                        v.add(next);
+                        q.offer(next);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+}
