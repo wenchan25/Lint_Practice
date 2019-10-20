@@ -1,0 +1,23 @@
+public class Solution {
+    /**
+     * @param root: the root of binary tree
+     * @return: the new root
+     */
+     
+    // global variable
+    int sum = 0;
+    
+    public TreeNode convertBST(TreeNode root) {
+        // write your code here
+        dfs(root);
+        return root;
+    }
+    
+    void dfs(TreeNode curr) {
+        if (curr == null) return;
+        dfs(curr.right);
+        sum += curr.val;
+        curr.val = sum;
+        dfs(curr.left);
+    }
+}
