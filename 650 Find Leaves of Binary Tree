@@ -1,0 +1,30 @@
+/* 这道题的重点在于找到每个node的height，把属于同一层height的node抓起来 */
+/* dfs里面，对于每个node，找到它的最大height，然后把它的value加进去 */
+
+public class Solution {
+    /*
+     * @param root: the root of binary tree
+     * @return: collect and remove all leaves
+     */
+    Map<Integer, List<Integer>> heightMap = new HashMap<>(); 
+    
+    public List<List<Integer>> findLeaves(TreeNode root) {
+        // write your code here
+        List<List<Integer>> res = new ArrayList<>();
+       
+        int maxHeight = dfs(root);
+        
+        for (int i = 1; i <= maxHeight; i++) {
+            res.add(heightMap.get(i));
+        }
+        return res;
+    }
+    
+    private int dfs(TreeNode curr){
+        if (curr == null) return 0;
+        int h = Math.max(dfs(curr.left), dfs(curr.right)) + 1;
+        heightMap.putIfAbsent(h, new ArrayList<>());
+        heightMap.get(h).add(curr.val);
+        return h;
+    }
+}
