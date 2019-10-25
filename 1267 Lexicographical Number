@@ -1,0 +1,31 @@
+/* 经典DFS */
+
+public class Solution {
+    /**
+     * @param n: an integer
+     * @return: 1 - n in lexicographical order
+     */
+    public List<Integer> lexicalOrder(int n) {
+        // write your code here
+        List<Integer> res = new ArrayList<>();
+        
+        // 把1作为树的顶点，然后是2作为顶点，循环
+        for (int i = 1; i < 10; i++) {
+            if (i <= n) res.add(i);
+            if (i * 10 <= n) dfs(i, res, n);
+        }
+        
+        return res;
+    }
+    
+    void dfs (int curr, List<Integer> res, int limit) {
+        
+        // 进来之后，先横向展开
+        for (int i = 0; i < 10; i++) {
+            int next = curr * 10 + i;
+            if (next > limit) break; // continue也可以，只是没必要
+            res.add(next);
+            dfs(next, res, limit); // 然后往下传递
+        }
+    }
+}
