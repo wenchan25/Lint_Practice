@@ -1,0 +1,78 @@
+/* Priority Queue method */
+public class Solution {
+    /**
+     * @param lists: a list of ListNode
+     * @return: The head of one sorted list.
+     */
+    public ListNode mergeKLists(List<ListNode> lists) {  
+        // write your code here
+        
+        // coner case
+        if (lists == null) return null;
+        
+        // put all the heads into min heap
+        PriorityQueue<ListNode> pq = new PriorityQueue<>((a,b) -> a.val - b.val);
+        for (ListNode head : lists) {
+            if (head != null) pq.offer(head);
+        }
+        
+        // take the list node one by one 
+        ListNode dummy = new ListNode(-1);
+        ListNode head = dummy;
+        
+        while (!pq.isEmpty()) {
+            ListNode curr = pq.poll();
+            head.next = curr; // attach to the head
+            head = head.next; // move the pointer one position
+            
+            if (curr.next != null) pq.offer(curr.next);
+        }
+        
+        return dummy.next;
+    }
+}
+
+/* divide and conquer, very good and comprehensive */
+public class Solution {
+    /**
+     * @param lists: a list of ListNode
+     * @return: The head of one sorted list.
+     */
+    public ListNode mergeKLists(List<ListNode> lists) {  
+        // write your code here
+        return mergeHelper(lists, 0, lists.size() - 1);
+    }
+    
+    private ListNode mergeHelper(List<ListNode> lists, int start, int end) {
+        if (start == end) return lists.get(start);
+        
+        int mid = start + (end - start) / 2;
+        
+        ListNode left = mergeHelper(lists, start, mid);
+        ListNode right =mergeHelper(lists, mid + 1, end);
+        
+        return mergeTwoLists(left, right);
+    }
+    
+    private ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        ListNode dummy = new ListNode(-1);
+        ListNode head = dummy;
+        
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                head.next = list1; // attach the smaler one;
+                // head = head.next; // move one position
+                list1 = list1.next; 
+            } else {
+                head.next = list2;
+                // head = head.next;
+                list2 = list2.next;
+            }
+            head = head.next; // can be common section
+        }
+        
+        head.next = list1 == null ? list2 : list1;
+        
+        return dummy.next;
+    }
+}
