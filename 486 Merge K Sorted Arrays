@@ -1,0 +1,39 @@
+/* solution 1: 分治 comprehensive */
+/* Time: O(nlogk), Space: O(n) */
+public class Solution {
+    /**
+     * @param arrays: k sorted integer arrays
+     * @return: a sorted array
+     */
+    public int[] mergekSortedArrays(int[][] arrays) {
+        // write your code here
+        return mergeHelper(arrays, 0, arrays.length - 1);
+    }
+
+    private int[] mergeHelper(int[][] arrays, int start, int end) {
+        if (start == end) return arrays[start];
+
+        int mid = start + (end - start) / 2;
+        int[] left = mergeHelper(arrays, start, mid);
+        int[] right = mergeHelper(arrays, mid + 1, end);
+        return mergeTwoArrays(left, right);
+    }
+
+    private int[] mergeTwoArrays(int[] a1, int[] a2) {
+        int[] res = new int[a1.length + a2.length];
+
+        int indexA1 = 0, indexA2 = 0, indexRes = 0;
+        while (indexA1 < a1.length && indexA2 < a2.length) {
+            if (a1[indexA1] < a2[indexA2]) res[indexRes] = a1[indexA1++];
+            else res[indexRes] = a2[indexA2++];
+            indexRes++;
+        }
+
+        while (indexA1 < a1.length) res[indexRes++] = a1[indexA1++];
+        while (indexA2 < a2.length) res[indexRes++] = a2[indexA2++];
+
+        return res;
+    }
+}
+
+/* solution 2: minHeap */
