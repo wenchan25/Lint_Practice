@@ -36,4 +36,46 @@ public class Solution {
     }
 }
 
-/* solution 2: minHeap */
+/* solution 2: minHeap 不需要构造一个新的node class，也不需要lambda expression */
+public class Solution {
+    /**
+     * @param arrays: k sorted integer arrays
+     * @return: a sorted array
+     */
+    public int[] mergekSortedArrays(int[][] arrays) {
+        // write your code here
+
+        if (arrays == null || arrays[0].length == 0) return new int[]{};
+
+        // initialize PQ
+        Queue<Integer> pq = new PriorityQueue<>();
+        int resultArrayCount = 0;
+        int colIndex = 0; // 2D index, i.e., index for each int[]
+
+        for (int rowIndex = 0; rowIndex < arrays.length; rowIndex++) {
+            if (arrays[rowIndex] != null && colIndex < arrays[rowIndex].length) {
+                pq.offer(arrays[rowIndex][colIndex]);
+                resultArrayCount += arrays[rowIndex].length;
+            }
+        }
+
+        // move the index pointer to the right 1 position
+        colIndex++;
+
+        // initialize the result array;
+        int[] res = new int[resultArrayCount];
+        int resIndex = 0;
+
+        while (!pq.isEmpty()) {
+            int curr = pq.poll();
+            res[resIndex++] = curr;
+            for (int rowIndex = 0; rowIndex < arrays.length; rowIndex++) {
+                if (arrays[rowIndex] != null && colIndex < arrays[rowIndex].length) {
+                    pq.offer(arrays[rowIndex][colIndex]);
+                }
+            }
+            colIndex++;
+        }
+        return res;
+    }
+}
