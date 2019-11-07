@@ -1,0 +1,49 @@
+/* Iteration 顺序很重要 */
+class Solution {
+    public boolean isSymmetric(TreeNode root) {
+        Queue<TreeNode> q = new LinkedList<>();
+        
+        if (root == null) return true; // shortcut
+        
+        q.offer(root.left);
+        q.offer(root.right);
+        
+        while (!q.isEmpty()) {
+            TreeNode t1 = q.poll(), t2 = q.poll();// get the first 2 elements;
+            
+            // 必须按照这个顺序检验
+            if (t1 == null && t2 == null) continue; // reached the child node;
+            if (t1 == null || t2 == null) return false; // one of them is null;
+            if (t1.val != t2.val) return false; // check the values, not only the node;
+            
+            q.offer(t1.left);
+            q.offer(t2.right);
+            q.offer(t1.right);
+            q.offer(t2.left);
+        }
+        return q.isEmpty();
+        
+    }
+}
+
+/* Recursion */
+public class Solution {
+    /**
+     * @param root: root of the given tree
+     * @return: whether it is a mirror of itself 
+     */
+    public boolean isSymmetric(TreeNode root) {
+        // Write your code here
+        if (root == null) return true; // necessary check
+        
+        return isMirror(root.left, root.right);
+    }
+    
+    private boolean isMirror(TreeNode n1, TreeNode n2) {
+        if (n1 == null && n2 == null) return true;
+        if (n1 == null || n2 == null) return false;
+        if (n1.val != n2.val) return false;
+        
+        return isMirror(n1.left, n2.right) && isMirror(n1.right, n2.left);
+    }
+}
