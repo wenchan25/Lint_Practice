@@ -1,0 +1,30 @@
+/* Iteration */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        
+        if (head == null) return head;
+        
+        while (head != null) {
+            ListNode nextNode = head.next; // temporary store next node;
+            head.next = prev; // point backwards
+            prev = head; // move prev one step up;
+            head = nextNode; // move curr one step;
+        }
+        return prev;
+    }
+}
+
+/* Recursion */
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if (head == null || head.next == null) return head; // check head.next is important
+        
+        ListNode nextNode = head.next; // temporary store next node;
+        ListNode rest = reverseList(nextNode); // recursively retrieve the rest nodes, assuming they are already reversed
+        nextNode.next = head; // point backwards;
+        head.next = null; // break current pointer;
+        
+        return rest;
+    }
+}
