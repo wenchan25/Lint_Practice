@@ -1,0 +1,90 @@
+/* Best, 1 stack soution, push the opposite */
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Character> stack = new Stack<>();
+        
+        for (int i = 0; i < s.length(); i++){
+            char c = s.charAt(i);
+            if (c == '{') stack.push('}'); // push the opposite symbol
+            else if (c == '[') stack.push(']');
+            else if (c == '(') stack.push(')');
+            else { 
+                // right part comes in, return false if it's empty now or it's does not match the stack top
+                if (stack.isEmpty() || c != stack.pop()) return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+}
+
+/*================================================*/
+/* 1 stack, normal solution */
+class Solution {
+     public boolean isValid(String s) {
+        // early exit
+        if (s == null || s.length() == 0) return true; 
+        if (s.length() == 1) return false;
+
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            // check if it's left parenthesis
+            if (c == '(' || c == '{' || c == '[') stack.push(c); // push left
+            else { 
+                if (stack.isEmpty() || 
+                c == ')' && stack.pop() != '(' ||  // can directly pop()
+                c == '}' && stack.pop() != '{' || 
+                c == ']' && stack.pop() != '[')
+                    return false;
+            }
+            
+        }
+        return stack.isEmpty();
+    }
+}
+
+/* Map + Stack, will be more generic to handle more symbols */
+class Solution {
+    public boolean isValid(String s) {
+        if (s.length() == 0) return true; // boundary
+
+        Map<Character, Character> map = new HashMap<>();
+        map.put(')', '(');
+        map.put('}', '{');
+        map.put(']', '[');
+
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i); // )
+            if (map.containsKey(c)) { // if it's closing
+                if (stack.isEmpty()) return false;
+                else if (map.get(c) != stack.pop())
+                    return false; // it will pop anyway, so no need to worry the top element;
+            } else stack.push(c);
+        }
+        return stack.isEmpty();
+    }
+}
+
+/* another solution, preferred as of 10/07/2019 */
+class Solution {
+    public boolean isValid(String s) {
+        if (s == null || s.length() == 0) return true;
+        
+        char[] sc = s.toCharArray();
+        
+        Stack<Character> stack = new Stack<>();
+        
+        for (char c : sc) {
+            if (c == '{') stack.push('}');
+            else if (c == '[') stack.push(']');
+            else if (c == '(') stack.push(')');
+            else {
+                if (stack.isEmpty() || c != stack.pop()) return false;
+            }
+        }
+        return stack.isEmpty();
+    }
+}
