@@ -1,0 +1,87 @@
+/* Priority Queue method, preferred as of 11/07/2019 since it's related to merge k sorted lists */
+
+public class Solution {
+    /**
+     * @param l1: ListNode l1 is the head of the linked list
+     * @param l2: ListNode l2 is the head of the linked list
+     * @return: ListNode head of linked list
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        // write your code here
+        
+        // need to exit condition
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+
+        Queue<ListNode> pq = new PriorityQueue<>((a, b) -> a.val - b.val);
+        pq.offer(l1);
+        pq.offer(l2);
+
+        ListNode dummy = new ListNode(-1);
+        ListNode res = dummy;
+
+        while (!pq.isEmpty()) {
+            ListNode curr = pq.poll();
+            dummy.next = curr;
+            dummy = dummy.next; // must move one place further
+            if (curr.next != null) pq.offer(curr.next);
+        }
+        return res.next;
+        
+    }
+}
+
+
+/* Iteration */
+
+class Solution {
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+        
+        ListNode prev = new ListNode(0); // need to have a value;
+        ListNode head = prev;
+        
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
+                head.next = l1;
+                l1 = l1.next;
+            }
+            else if (l1.val > l2.val) {
+                head.next = l2;
+                l2 = l2.next;
+            }
+            head = head.next; // curcial to move this cursor;
+            
+        }
+        
+        head.next = l1 == null ? l2 : l1;
+        
+        return prev.next;
+    }
+}
+
+/* Recursion */
+public class Solution {
+    /**
+     * @param l1: ListNode l1 is the head of the linked list
+     * @param l2: ListNode l2 is the head of the linked list
+     * @return: ListNode head of linked list
+     */
+    public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        // write your code here
+        
+        // need to exit condition
+        if (l1 == null) return l2;
+        if (l2 == null) return l1;
+        
+        if (l1.val < l2.val) {
+            // throw the rest of l1 to compare with l2;
+            l1.next = mergeTwoLists(l1.next, l2);
+            return l1; // only need catch the head;
+        } else {
+            l2.next = mergeTwoLists(l1, l2.next);
+            return l2;
+        }
+    }
+}
