@@ -1,0 +1,46 @@
+public class Solution {
+    /**
+     * @param num1: a non-negative integers
+     * @param num2: a non-negative integers
+     * @return: return sum of num1 and num2
+     */
+    public String addStrings(String num1, String num2) {
+        // write your code here
+
+        // corner case
+        if (num1 == null || num2 == null) return null;
+
+        // initialize result
+        StringBuilder res = new StringBuilder();
+
+        int carry = 0;
+        int len1 = num1.length() - 1;
+        int len2 = num2.length() - 1;
+
+        int n1 = 0, n2 = 0;
+
+        while (len1 >= 0 || len2 >= 0) {
+            // nums1 still has numbers
+            if (len1 >= 0) {
+                char c1 = num1.charAt(len1--);
+                n1 = c1 - '0';
+            } else {
+                n1 = 0;
+            }
+            if (len2 >= 0) {
+                n2 = num2.charAt(len2--) - '0';
+            } else {
+                n2 = 0;
+            }
+
+            // sum of n1 and n2 at this point
+            int sum = n1 + n2 + carry;
+            carry = sum > 9 ? 1 : 0;
+            res.insert(0, sum%10);
+        }
+
+        if (carry == 1) res.insert(0, 1);
+        return res.toString();
+            
+    }
+}
