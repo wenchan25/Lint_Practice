@@ -1,0 +1,31 @@
+public class Solution {
+    /**
+     * @param nums: an array containing n + 1 integers which is between 1 and n
+     * @return: the duplicate one
+     */
+    public int findDuplicate(int[] nums) {
+        // write your code here
+        
+        // corner case
+        if (nums == null || nums.length < 1) return -1;
+
+        // initialize 2 pointers
+        int slowPointer = nums[0];
+        int fastPointer = nums[nums[0]];
+
+        while (slowPointer != fastPointer) {
+            slowPointer = nums[slowPointer];
+            fastPointer = nums[nums[fastPointer]];
+        }
+
+        fastPointer = 0;
+        while (slowPointer != fastPointer) {
+            slowPointer = nums[slowPointer];
+            fastPointer = nums[fastPointer];
+        }
+
+        return fastPointer;
+    }
+}
+
+// https://leetcode.com/problems/find-the-duplicate-number/solution/
