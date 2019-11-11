@@ -1,0 +1,82 @@
+/* 非递归，用stack */
+public class Solution {
+    /**
+     * @param root: A Tree
+     * @return: Inorder in ArrayList which contains node values.
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        // write your code here
+        Stack<TreeNode> s = new Stack<>();
+        List<Integer> res = new ArrayList<>();
+
+        // 把所有的left都先压进去
+        while (root != null) {
+            s.push(root);
+            root = root.left;
+        }
+
+        // 然后一个个地往外吐
+        while (!s.isEmpty()) {
+            TreeNode curr = s.pop();
+            res.add(curr.val);
+            if (curr.right != null) {
+                // get the right node
+                TreeNode node = curr.right; 
+                // then do the same thing: push the left
+                while (node != null) {
+                    s.push(node);
+                    node = node.left;
+                }
+            }
+        }
+        return res;
+    }
+}
+
+/* Recursion 1 */
+public class Solution {
+    /*
+     * @param root: A Tree
+     * @return: Inorder in ArrayList which contains node values.
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<Integer>();
+        traverse(root, result);
+        return result;
+    }
+    
+    private void traverse(TreeNode root, List<Integer> result){
+        if(root == null){
+            return;
+        }
+        
+        traverse(root.left, result);
+        result.add(root.val);
+        traverse(root.right, result);
+    }
+}
+
+
+/* Recursion 2, Divide and conquer */
+public class Solution {
+    /*
+     * @param root: A Tree
+     * @return: Inorder in ArrayList which contains node values.
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<Integer>();
+        if(root == null){
+            return result;
+        }
+        
+        //Divide
+        List<Integer> left = inorderTraversal(root.left);
+        List<Integer> right = inorderTraversal(root.right);
+        
+        //Conquer
+        result.addAll(left);
+        result.add(root.val);
+        result.addAll(right);
+        return result;
+    }
+}
