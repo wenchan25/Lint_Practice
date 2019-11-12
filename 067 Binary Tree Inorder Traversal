@@ -54,7 +54,7 @@ public class Solution {
         result.add(root.val);
         traverse(root.right, result);
     }
-}
+} 
 
 
 /* Recursion 2, Divide and conquer */
