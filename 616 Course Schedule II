@@ -1,0 +1,62 @@
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        // write your code here
+        int[] res = new int[numCourses];
+
+        // 1. build the graph, key is prerequisite, value is its dependencies;
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for (int i = 0; i < numCourses; i++) {
+            graph.put(i, new ArrayList<>());
+        }
+        for (int i = 0; i < prerequisites.length; i++) {
+            // reverse the dependency
+            int prerequisite = prerequisites[i][1];
+            int course = prerequisites[i][0];
+            List<Integer> courseList = graph.get(prerequisite);
+            courseList.add(course);
+        }
+
+        // 2. build indegree map
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < numCourses; i++) {
+            List<Integer> courseList = graph.get(i);
+            for (Integer course : courseList) {
+                // contains course means, such course already has dependencies somewhere
+                if (map.containsKey(course)) {
+                    map.put(course, map.get(course) + 1);
+                } else {
+                    map.put(course, 1);
+                }
+            }
+        }
+
+        // 3. queue offer 0 indegree, find the starting point
+        Queue<Integer> q = new LinkedList<>();
+
+        for (int i = 0; i < numCourses; i++) {
+            if (!map.containsKey(i)) {
+                q.offer(i);
+            }
+        }
+
+        // 4. do bfs
+        int count = 0;
+        while (!q.isEmpty()) {
+            int curr = q.poll(); // this is the very first prerequisite
+            res[count++] = curr;
+            List<Integer> courseList = graph.get(curr);
+            for (Integer course : courseList) {
+                // decrease the incoming line by 1;
+                map.put(course, map.get(course) - 1);
+                if (map.get(course) == 0) {
+                    // it becomes one of the starting point
+                    q.offer(course);
+                }
+            }
+        }
+
+        if (count == numCourses) {
+            // all of them have been organized
+            return res;
+        }
+        return new int[]{};
+    }
