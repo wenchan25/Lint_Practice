@@ -1,0 +1,58 @@
+public class Solution {
+    /**
+     * @param results a list of <student_id, score>
+     * @return find the average of 5 highest scores for each person
+     * Map<Integer, Double> (student_id, average_score)
+     */
+    public Map<Integer, Double> highFive(Record[] results) {
+        // Write your code here
+
+        // res, key is id, value is score
+        Map<Integer, Double> res = new HashMap<>();
+
+        // map, key is id, value is PQ
+        // PQ natural ordering is ascendng
+        Map<Integer, Queue<Integer>> hash = new HashMap<>();
+
+        for (Record r : results) {
+            int studentId = r.id;
+            int studentScore = r.score;
+            Queue<Integer> pq = new PriorityQueue<>();
+
+            // if no such student yet
+            if (!hash.containsKey(studentId)) {
+
+                hash.put(studentId, pq);
+            } else {
+                // there is such student record
+                pq = hash.get(studentId);
+            }
+
+            if (pq.size() < 5) {
+                pq.add(studentScore);
+            } else {
+                if (studentScore > pq.peek()) {
+                    pq.poll();
+                    pq.add(studentScore);
+                }
+            }
+        }
+
+
+        // after iteration, need to calculate
+        for (Map.Entry<Integer, Queue<Integer>> entry : hash.entrySet()) {
+            int studentId = entry.getKey();
+            Queue<Integer> studentScore = entry.getValue();
+
+            double average = 0;
+
+            while (!studentScore.isEmpty()) {
+                average += studentScore.poll();
+            }
+
+            average /= 5.0;
+            res.put(studentId, average);
+        }
+        return res;
+    }
+}
