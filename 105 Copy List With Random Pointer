@@ -56,13 +56,14 @@ public class Solution {
     
     // 3rd iteration
     private RandomListNode splitList(RandomListNode head) {
-        RandomListNode newHead = head.next;
+        // this is more like a dummy;
+        RandomListNode newHead = head.next; 
         while (head!=null) {
-            RandomListNode temp = head.next;
-            head.next = temp.next;
-            head = head.next;
+            RandomListNode temp = head.next; // temp is our de facto pointer
+            head.next = temp.next; // give the original linking back
+            head = head.next; // move from 1 to 2
             if (temp.next != null) {
-                temp.next = temp.next.next;
+                temp.next = temp.next.next; // point from 1'->2 to 1'->2'
             }
         }
         return newHead;
