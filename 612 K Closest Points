@@ -1,0 +1,46 @@
+/**
+ * Definition for a point.
+ * class Point {
+ *     int x;
+ *     int y;
+ *     Point() { x = 0; y = 0; }
+ *     Point(int a, int b) { x = a; y = b; }
+ * }
+ */
+
+public class Solution {
+    /**
+     * @param points: a list of points
+     * @param origin: a point
+     * @param k: An integer
+     * @return: the k closest points
+     */
+    public Point[] kClosest(Point[] points, Point origin, int k) {
+        // write your code here
+        Queue<Point> pq = new PriorityQueue<>(k, (existing, incoming) -> {
+            long diff = getDistance(incoming, origin) - getDistance(existing, origin);
+            // pq naturally order by ascending;
+            if (diff > 0) return 1; // 1 means mark incoming as larger, and keep existing one;
+            if (diff < 0) return -1; 
+            if (diff == 0) diff = incoming.x - existing.x;
+            if (diff == 0) diff = incoming.y - existing.y;
+            return (int) diff;
+        });
+
+        for (Point p : points) {
+            pq.offer(p);
+            if (pq.size() > k) pq.poll();
+        }
+
+        Point[] res = new Point[k];
+        while (!pq.isEmpty()) {
+            res[--k] = pq.poll();
+        }
+
+        return res;
+    }
+    
+    private long getDistance (Point a, Point b) {
+        return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
+    }
+}
