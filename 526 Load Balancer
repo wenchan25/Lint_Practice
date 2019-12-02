@@ -1,0 +1,57 @@
+public class LoadBalancer {
+    
+     // initialize variables
+    int index = 0;
+    // key is server id, value is array index
+    Map<Integer, Integer> serverIdIndex = new HashMap<>();
+    List<Integer> array = new ArrayList<>();
+    Random rand = new Random();
+    
+    public LoadBalancer() {
+        // do intialization if necessary
+    }
+
+    /*
+     * @param server_id: add a new server to the cluster
+     * @return: nothing
+     */
+    public void add(int server_id) {
+        // write your code here
+        // it will add if not exists; if exists => skip
+        if (!serverIdIndex.containsKey(server_id)) {
+            array.add(server_id); // add to array end
+            serverIdIndex.put(server_id, index); // add to map
+            index++;
+        }
+    }
+
+    /*
+     * @param server_id: server_id remove a bad server from the cluster
+     * @return: nothing
+     */
+    public void remove(int server_id) {
+        // write your code here
+        if (serverIdIndex.containsKey(server_id)) {
+            int lastItem = array.get(index-1);
+            int removeIndex = serverIdIndex.get(server_id);
+            
+            // swap
+            // update the map
+            serverIdIndex.put(lastItem, removeIndex);
+            array.set(removeIndex, lastItem);
+            
+            // need to swap b/c array.remove at last position is O(1)
+            serverIdIndex.remove(server_id);
+            array.remove(index-1);
+            index--;
+        }
+    }
+
+    /*
+     * @return: pick a server in the cluster randomly with equal probability
+     */
+    public int pick() {
+        // write your code here
+        return array.get(rand.nextInt(index));
+    }
+}
