@@ -1,0 +1,170 @@
+/**
+ * // This is the interface that allows for creating nested lists.
+ * // You should not implement it, or speculate about its implementation
+ * public interface NestedInteger {
+ *
+ *     // @return true if this NestedInteger holds a single integer,
+ *     // rather than a nested list.
+ *     public boolean isInteger();
+ *
+ *     // @return the single integer that this NestedInteger holds,
+ *     // if it holds a single integer
+ *     // Return null if this NestedInteger holds a nested list
+ *     public Integer getInteger();
+ *
+ *     // @return the nested list that this NestedInteger holds,
+ *     // if it holds a nested list
+ *     // Return null if this NestedInteger holds a single integer
+ *     public List<NestedInteger> getList();
+ * }
+ */
+import java.util.Iterator;
+
+public class NestedIterator implements Iterator<Integer> {
+    
+    // stack to store nested integer
+    private Stack<NestedInteger> stack;
+    
+    // method to store the list of nested integers
+    private void pushListToStack(List<NestedInteger> nestedList) {
+        Stack<NestedInteger> temp = new Stack<>();
+        for (NestedInteger nested : nestedList) {
+            temp.push(nested);
+        }
+        
+        while (!temp.isEmpty()) {
+            stack.push(temp.pop());
+        }
+    }
+    
+
+    public NestedIterator(List<NestedInteger> nestedList) {
+        // Initialize your data structure here.
+        stack = new Stack<>();
+        pushListToStack(nestedList);
+    }
+
+    // @return {int} the next element in the iteration
+    @Override
+    public Integer next() {
+        // Write your code here
+        if (!hasNext()) {
+            return null;
+        }
+        int topInteger = stack.pop().getInteger();
+        return topInteger;
+    }
+
+    // @return {boolean} true if the iteration has more element or false
+    @Override
+    public boolean hasNext() {
+        // Write your code here
+        // 条件是stack不为空，而且顶端元素不能是一个单个的
+        while (!stack.isEmpty() && !stack.peek().isInteger()) {
+            List<NestedInteger> tempList = stack.pop().getList();
+            pushListToStack(tempList);
+        }
+        
+        return !stack.isEmpty();
+    }
+
+    @Override
+    public void remove() {}
+}
+
+/**
+ * Your NestedIterator object will be instantiated and called as such:
+ * NestedIterator i = new NestedIterator(nestedList);
+ * while (i.hasNext()) v.add(i.next());
+ */
+
+
+/*
+Iterator:
+
+It is a universal iterator as we can apply it to any Collection object. By using Iterator, we can perform both read and remove operations. It is improved version of Enumeration with additional functionality of remove-ability of a element.
+
+Iterator must be used whenever we want to enumerate elements in all Collection framework implemented interfaces like Set, List, Queue, Deque and also in all implemented classes of Map interface. Iterator is the only cursor available for entire collection framework.
+
+Iterator object can be created by calling iterator() method present in Collection interface.
+
+// Here "c" is any Collection object. itr is of
+// type Iterator interface and refers to "c"
+Iterator itr = c.iterator();
+
+Iterator interface defines three methods:
+
+// Returns true if the iteration has more elements
+public boolean hasNext();
+
+// Returns the next element in the iteration
+// It throws NoSuchElementException if no more 
+// element present
+public Object next();
+
+// Remove the next element in the iteration
+// This method can be called only once per call
+// to next()
+public void remove();
+
+remove() method can throw two exceptions
+
+    UnsupportedOperationException : If the remove operation is not supported by this iterator
+    IllegalStateException : If the next method has not yet been called, or the remove method has already been called after the last call to the next method
+
+filter_none
+
+edit
+
+play_arrow
+
+
+// Java program to demonstrate Iterator 
+import java.util.ArrayList; 
+import java.util.Iterator; 
+  
+public class Test 
+{ 
+    public static void main(String[] args) 
+    { 
+        ArrayList al = new ArrayList(); 
+  
+        for (int i = 0; i < 10; i++) 
+            al.add(i); 
+  
+        System.out.println(al); 
+  
+        // at beginning itr(cursor) will point to 
+        // index just before the first element in al 
+        Iterator itr = al.iterator(); 
+  
+        // checking the next element availabilty 
+        while (itr.hasNext()) 
+        { 
+            //  moving cursor to next element 
+            int i = (Integer)itr.next(); 
+  
+            // getting even elements one by one 
+            System.out.print(i + " "); 
+  
+            // Removing odd elements 
+            if (i % 2 != 0) 
+               itr.remove();  
+        } 
+        System.out.println();  
+        System.out.println(al); 
+    } 
+} 
+
+Output:
+
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+0 1 2 3 4 5 6 7 8 9 
+[0, 2, 4, 6, 8]
+
+Limitations of Iterator :
+
+    Only forward direction iterating is possible.
+    Replacement and addition of new element is not supported by Iterator.
+
+*/
