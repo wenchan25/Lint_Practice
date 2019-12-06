@@ -1,0 +1,48 @@
+public class GeoHash {
+    /*
+     * @param latitude: one of a location coordinate pair 
+     * @param longitude: one of a location coordinate pair 
+     * @param precision: an integer between 1 to 12
+     * @return: a base32 string
+     */
+    public String encode(double latitude, double longtitude, int precision) {
+        String codeBase = "0123456789bcdefghjkmnpqrstuvwxyz";
+        String latitudeBinary = getBinary(latitude, -90, 90);
+        String longitudeBinary = getBinary(longtitude, -180, 180);
+
+        StringBuilder hashCode = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < 30; i++) {
+            sb.append(longitudeBinary.charAt(i)); // odd
+            sb.append(latitudeBinary.charAt(i)); // even
+        }
+
+        // it will need to be step 5, because it has 32 code base
+        for (int j = 0; j < 60; j += 5) {
+            String currBinBlock = sb.substring(j, j + 5);
+            int index = Integer.parseInt(currBinBlock, 2);
+            char curr = codeBase.charAt(index);
+            hashCode.append(curr);
+        }
+        return hashCode.substring(0, precision);
+    }
+
+    private String getBinary(double value, double left, double right) {
+        StringBuilder sb = new StringBuilder();
+        
+        for (int i = 0; i < 30; i++) {
+            double mid = left + (right - left) / 2.0;
+            if (value > mid) {
+                left = mid;
+                sb.append("1");
+            } else {
+                right = mid;
+                sb.append("0");
+            }
+        }
+        return sb.toString();
+    }
+
+
+}
